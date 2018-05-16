@@ -1,5 +1,7 @@
 # Implementation Step 1: Tracking Reducer Usage
 
+> This is based on rewriting `connect/index.js` in our codesandbox: https://codesandbox.io/s/jn8l8ly85?module=%2Fsrc%2Fconnect%2FProvider.js
+
 ## `connect` implementation
 
 ```js
