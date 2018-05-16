@@ -14,14 +14,14 @@ export default function connect(componentFunc) {
   class Inner extends React.Component {
     constructor(props) {
       super(props)
-      this.state = createPathTracker(state)
+      this.state = createPathTracker(props.state)
     }
 
     shouldComponentUpdate(nextProps) {
       const stateChanged = this.state._hasAccessedPathsChanged(nextProps.state)
 
       if (stateChanged) {
-        this.state = createPathTracker(nextProps.state) // we need a new tracker that contains the new state
+        this.state = createPathTracker(nextProps.state) // we need a new tracker that contains next state
       }
 
       return stateChanged || !shallowEqual(nextProps.props, this.props.props)
