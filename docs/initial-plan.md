@@ -489,3 +489,34 @@ The next idea is to use the new context API to grab the hash from the closest pa
 I think now that this is goal is written down the solution will come to us. It's an important--because Remixx modules are not just one component, but however many components you want to nest.
 
 Another thing we need to think about is efficient propagation of state from grand parent modules to grand child modules and so on. If Remixx modules must receive all state as props, we will be essentially making them behave the old pre-redux way with lots of props passing/drilling. For example `state.user` becomes `props.user` and now the child Remixx module must do a lot of work to pass that `user` down. Should we promote use of the `context API` internally to solve this? Or should we provide an easy way to duplicate in the module's own state? How can we best automate the second option? Is there a sort of "alias" technique where the result isn't duplicate state in the store?? Perhaps we can provide an API to map the names of keys as props that the Remixx module can access directly from the redux store for efficiency. Perhaps through module-level selectors, remixx modules can select state passed from the parent as props, and make it available as its own `state` to its own nested components. ..This is the sort of question we don't need the answer to immediately; it will unveil itself at the right time after we make enough progress toward the overall goal and gain a better understanding of what the landscape looks like. *But certainly prop drilling shouldn't once again become an issue when one of the primary purposes of global state stores was to solve the prop drilling issue.* I'm confident a slick solution will come to us.
+
+
+## THE END
+
+So that's all I have for now. Hopefully this paints the complete picture. I'm sure you will discover many missing pieces. That's what this is all about. At the same time, I'm pretty happy with this 3 pillar "wish list." It's basically been in my head for a year now. The only thing missing is perhaps immer is used for reducers by default, and we forget about native js data structures and potential mistakes that can be made with forgetting to clone.
+
+I can imagine you would like to plan the implementation more deeply. Feel free to create another `.md` adjacent to this file, and we can collaborate on it together. Once I can see your understanding of things, I can write more succinctly to communicate just the core thoughts. And eventually we can move to the most succinct option: *code*. I'm sure there are some caveats and challenges I'm unaware of regarding the usage of proxies. That's what I would love to learn about from you during this phase. You may simply want to add line comments to this file to address the most important discussion points.
+
+Either way, just know I'm very serious about getting this done. In about 2 weeks I'll be devoting myself to it full time. My hope is you can kickstart this and we can turn it into our co-creation. Again, priority #1 (to me at least) is path access tracking to achieve *"reverse smart subscriptions."* If we can performantly eliminate all need for `mapStateToProps` and `mapDispatchToProps` (and there for `mergeProps`), we'll have accomplished a major milestone.
+
+..and oh yea, I almost forgot, here's the general way outside of Remixx modules to supply the 3rd `actions` argument to all component functions:
+
+`createStore(rootReducer, selectors, actions, initialState, enhancer)`
+
+But keep in mind, Remixx modules will likely become the dominant approach, in which case `createStore` might end up just looking like this: `createStore(enhancer)`. We can keep that idea in the back of our heads. To start we shouldn't even worry about `selectors`. 
+
+And actually, while we're on the topic of "process" and "where to start," here's what I see:
+
+We can actually keep Redux to start, and build this simply as a replacement for `react-redux`. We'll listen to the redux store with `store.subscribe` and here our own object will compare the access paths subscribed to vs. the paths in state changed. And then trigger updates from our `connect` HOC.
+
+I think by isolating our first goal like this and not changing Redux, we'll be able to make the fastest progress. It's basically a continuation of that condesandbox. I think we should build it as a continuation of that codesandbox because by the time we're done Suspense might be out, so that will make our lives easier then if we have to change our approach to what is inevitably coming. If we have to make it backwards compatible that will likely be easier.
+
+This also changes one thing in the above implementation: basically all component will continue to receive all subscription events, and then within the component itself occurs the comparison of access paths to what state keys actually changed.
+
+So this means we can keep the same subscription propagation model (well, at least the same one from the codesandbox). The only downside is that it results in a little bit more rendering work as all these components will get notified unnecessarily. However, the rendering will short-circuit after one level, and no DOM mutation will ever happen. This is a result of the new context API, but I think it's worth it if it truly does solve the render syncronization and perf issues that the old `react-redux` does far too much work to avoid.
+
+Either way, it doesn't matter. What matters is we have a "test bed" to test our hypotheses regarding the access tracking within render. Once this is finalized, we can easily change the exact subscription transportation architecture. So let's isolate the next step removing the need for `mapStateToProps` in this demo:
+
+https://codesandbox.io/s/jn8l8ly85?module=%2Fsrc%2Fconnect%2FProvider.js
+
+by tracking keys during `render`. That's the goal.
