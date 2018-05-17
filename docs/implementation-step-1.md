@@ -123,15 +123,6 @@ the raw proxy magic in the most amount of simplicity possible. That way it's eas
 
 ```js
 class Proxy {
- _accessedPaths: {
-  foo: {
-    bar: {
-      more: { etc: {} },
-      anotherBranch: { etc: {} }
-    }
-  }
- }
-
  traverse(accessedPaths, obj, obj2) {
   return Object.keys(accessedPaths).find(key => {
     return obj[key] !== obj2[key] || this.traverse(accessedPaths[key], obj[key], obj2[key])
@@ -142,6 +133,25 @@ class Proxy {
    return this.traverse(this._accessedPaths, this._oldState, nextState)
  }
 }
+
+const proxy = new Proxy
+
+// user performs:
+// obj.foo.bar.more.etc
+// obj.foo.bar.anotherBranch.etc
+
+// now we have:
+proxy._accessedPaths: {
+  foo: {
+    bar: {
+      more: { etc: {} },
+      anotherBranch: { etc: {} }
+    }
+  }
+}
+
+// usage:
+proxy.hasAccessedPathsChanged(nextState)
 ```
 
 
