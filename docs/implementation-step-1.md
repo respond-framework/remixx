@@ -137,7 +137,7 @@ proxy._hasAccessedPathsChanged = (accessedPaths, obj, obj2) => {
   })
 }
 
-proxy._hasAccessedPathsChanged(proxy._accessedPaths)
+proxy._hasAccessedPathsChanged(proxy._accessedPaths, oldState, nextState)
 ```
 
 
