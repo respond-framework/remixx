@@ -131,13 +131,14 @@ proxy._accessedPaths = {
   }
 }
 
-proxy._hasAccessedPathsChanged = (accessedPaths, obj, obj2) => {
+proxy.traverse = (accessedPaths, obj, obj2) => {
   return Object.keys(accessedPaths).find(key => {
     return obj[key] !== obj2[key] || this._hasAccessedPathsChanged(accessedPaths[key], obj[key], obj2[key])
   })
 }
 
-proxy._hasAccessedPathsChanged(proxy._accessedPaths, oldState, nextState)
+proxy._hasAccessedPathsChanged = nextState => 
+   this.traverse(this._accessedPaths, this._oldState, nextState)
 ```
 
 
