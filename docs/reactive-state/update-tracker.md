@@ -28,3 +28,49 @@ I thing this is a main idea to spike.
 Probably this update set is a good fit for Context's changed bits, as long this is somehow similar, and could change set could be converted to a bit mask.
 Not sure how 31 bits could be usable, but could. 
  
+ 
+```js
+store.subscribe(state => {
+  // get the changed entities
+  const changes = extractChangesFromState(state, oldState);
+  
+  // traverse all connected components
+  traverseTrie(trieRoot, changes);  
+})
+
+
+// the bad - comparing the bigger tree with a smaller one
+// trie is array, changes - tree
+const traverseTrie = (trie, changes) => {
+  trie.forEach( ({key, leaf, node, selector}) => {
+    if(key in changes){
+      // we have a leaf (component[s]) for this update
+      if(leaf) markForUdate(leaf, key);
+      // go deeper
+      if(node) traverseTrie(node, changes[key])
+      
+      if(selector) selectorMightNeedDifferentLogic();
+    }
+  })
+}
+
+// better way
+// trie is tree, changes - array
+const traverseTrie = (trie, changes) => {
+  changes.forEach( ({key, node:changeNode}) => {
+    if(key in trie){
+      const {leaf, node, selector} = trie[key];
+      // we have a leaf (component[s]) for this update
+      if(leaf) markForUdate(leaf, key);
+      // go deeper
+      if(node) traverseTrie(node, changeNode)
+      
+      if(selector) selectorMightNeedDifferentLogic();
+    }
+  })
+}
+
+```
+
+The problem - one component could have more that 1 "connection" to the store, so could be "updated" several times during 
+change propagation. I am not sure that this is a problem, but better to find a way to optimize it.
