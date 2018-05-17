@@ -73,9 +73,39 @@ export default function createPathTracker(obj) {
 export default function createProxy(obj) {
   // the idea is this function creates an infinite proxy access recorder
   // where the following throws no errors:
-  // obj.foo.bar.more.evenMore.etc.etc.etc
+  // obj.foo.bar.more.etc
+  // obj.foo.bar.anotherBranch.etc
   return proxy
 }
+
+
+// this data structure is a tree.
+// option 1:
+proxy._accessedPaths = {
+  foo: {
+    bar: {
+      more: { etc: {} },
+      anotherBranch: { etc: {} }
+    }
+  }
+}
+
+// option 2:
+proxy._accessedPaths = [
+  [
+    'foo',
+    'bar',
+    'more',
+    'etc'
+    
+  ],
+  [
+    'foo',
+    'bar',
+    'anotherBranch',
+    'etc' 
+  ]
+]
 ```
 
 So this is just a hypothetical idea. It may not be feasable or smart. But like infinite numbers in math, they are impossible to reach,
