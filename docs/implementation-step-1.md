@@ -116,14 +116,14 @@ class Proxy {
  }
 }
 
-const proxy = new Proxy
+const stateProxy = createProxy(state)
 
 // user performs:
-// obj.foo.bar.more.etc
-// obj.foo.bar.anotherBranch.etc
+// stateProxy.foo.bar.more.etc
+// stateProxy.foo.bar.anotherBranch.etc
 
 // now we have:
-proxy._accessedPaths: {
+stateProxy._accessedPaths: {
   foo: {
     bar: {
       more: { etc: {} },
@@ -133,7 +133,7 @@ proxy._accessedPaths: {
 }
 
 // usage:
-proxy.hasAccessedPathsChanged(nextState)
+stateProxy.hasAccessedPathsChanged(nextState)
 ```
 
 
