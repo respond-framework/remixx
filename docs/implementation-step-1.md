@@ -122,7 +122,7 @@ the raw proxy magic in the most amount of simplicity possible. That way it's eas
 ## Better Traversing Algo
 
 ```js
-const proxy = class {
+class Proxy {
  _accessedPaths: {
   foo: {
     bar: {
