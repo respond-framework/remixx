@@ -79,8 +79,7 @@ export default function createProxy(obj) {
 }
 
 
-// this data structure is a tree.
-// option 1:
+// key access produces the following tree data structure:
 proxy._accessedPaths = {
   foo: {
     bar: {
@@ -89,23 +88,6 @@ proxy._accessedPaths = {
     }
   }
 }
-
-// option 2:
-proxy._accessedPaths = [
-  [
-    'foo',
-    'bar',
-    'more',
-    'etc'
-    
-  ],
-  [
-    'foo',
-    'bar',
-    'anotherBranch',
-    'etc' 
-  ]
-]
 ```
 
 So this is just a hypothetical idea. It may not be feasable or smart. But like infinite numbers in math, they are impossible to reach,
