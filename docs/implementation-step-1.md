@@ -133,7 +133,7 @@ proxy._accessedPaths = {
 
 proxy.traverse = (accessedPaths, obj, obj2) => {
   return Object.keys(accessedPaths).find(key => {
-    return obj[key] !== obj2[key] || this._hasAccessedPathsChanged(accessedPaths[key], obj[key], obj2[key])
+    return obj[key] !== obj2[key] || this.traverse(accessedPaths[key], obj[key], obj2[key])
   })
 }
 
