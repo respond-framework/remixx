@@ -122,23 +122,26 @@ the raw proxy magic in the most amount of simplicity possible. That way it's eas
 ## Better Traversing Algo
 
 ```js
-proxy._accessedPaths = {
+const proxy = class {
+ _accessedPaths: {
   foo: {
     bar: {
       more: { etc: {} },
       anotherBranch: { etc: {} }
     }
   }
-}
+ }
 
-proxy.traverse = (accessedPaths, obj, obj2) => {
+ traverse(accessedPaths, obj, obj2) {
   return Object.keys(accessedPaths).find(key => {
     return obj[key] !== obj2[key] || this.traverse(accessedPaths[key], obj[key], obj2[key])
   })
-}
+ }
 
-proxy._hasAccessedPathsChanged = nextState => 
-   this.traverse(this._accessedPaths, this._oldState, nextState)
+ hasAccessedPathsChanged(nextState) {
+   return this.traverse(this._accessedPaths, this._oldState, nextState)
+ }
+}
 ```
 
 
