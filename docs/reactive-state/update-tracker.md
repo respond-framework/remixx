@@ -23,6 +23,8 @@ It will be not easy to track the change - we have to reimpliment `immer`.
 As long we had to maintain compatibility with _reducers_ it could be tricky, and more about
 deep_equal. I hope immutability itself will help us to track down changed entities on store replacement.
 
+> UPD: https://github.com/theKashey/immutable-changes
+
 I thing this is a main idea to spike.
 
 Probably this update set is a good fit for Context's changed bits, as long this is somehow similar, and could change set could be converted to a bit mask.
