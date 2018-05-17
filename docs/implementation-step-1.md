@@ -103,6 +103,8 @@ the raw proxy magic in the most amount of simplicity possible. That way it's eas
 
 ## Better Traversing Algo
 
+> Kashey: this operation should be centralized to allow bulk optimizations, as long store updates are centralized.
+
 ```js
 class AccessProxy {
  constructor(state) {
