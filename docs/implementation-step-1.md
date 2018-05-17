@@ -58,7 +58,7 @@ export default function createPathTracker(obj) {
 
   proxy._hasAccessedPathsChanged = obj2 => {
     return !!proxy._accessedPaths.find(path => {
-      obj[path] !== obj2[path] // again, this needs to be generalized for nested paths
+      return obj[path] !== obj2[path] // again, this needs to be generalized for nested paths
     })
   }
 
@@ -117,6 +117,29 @@ that code lives in `createPathTracker`.
 Perhaps, this only serves as a way to communicate ideas from me to you. I'm in no way religious about the implementation. That's
 totally up to you based on the real details of how proxies work. I think it would also be nice to have a file that showcases
 the raw proxy magic in the most amount of simplicity possible. That way it's easier for me and others to understand.
+
+
+## Better Traversing Algo
+
+```js
+proxy._accessedPaths = {
+  foo: {
+    bar: {
+      more: { etc: {} },
+      anotherBranch: { etc: {} }
+    }
+  }
+}
+
+proxy._hasAccessedPathsChanged = (accessedPaths, obj, obj2) => {
+  return Object.keys(accessedPaths).find(key => {
+    return obj[key] !== obj2[key] || this._hasAccessedPathsChanged(accessedPaths[key], obj[key], obj2[key])
+  })
+}
+
+proxy._hasAccessedPathsChanged(proxy._accessedPaths)
+```
+
 
 
 ## FINAL NOTES:
