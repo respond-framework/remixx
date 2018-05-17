@@ -104,7 +104,11 @@ the raw proxy magic in the most amount of simplicity possible. That way it's eas
 ## Better Traversing Algo
 
 ```js
-class Proxy {
+class AccessProxy {
+ constructor(state) {
+  this._oldState = state
+ }
+ 
  traverse(accessedPaths, obj, obj2) {
   return Object.keys(accessedPaths).find(key => {
     return obj[key] !== obj2[key] || this.traverse(accessedPaths[key], obj[key], obj2[key])
@@ -116,7 +120,7 @@ class Proxy {
  }
 }
 
-const stateProxy = createProxy(state)
+const stateProxy = new AccessProxy(state)
 
 // user performs:
 // stateProxy.foo.bar.more.etc
