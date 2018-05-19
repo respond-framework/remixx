@@ -24,6 +24,8 @@ As long we had to maintain compatibility with _reducers_ it could be tricky, and
 deep_equal. I hope immutability itself will help us to track down changed entities on store replacement.
 
 > UPD: https://github.com/theKashey/immutable-changes
+> UPD: Might be that state-tree traverse should be run in parallel in
+observed-tree traverse, to not dive in any objects, nobody observes internally.
 
 I thing this is a main idea to spike.
 
