@@ -155,3 +155,6 @@ This isolates our task and minimizes the # of things we have to worry about. Let
 ## PS:
 All this looking quite similar to https://github.com/solkimicreb/react-easy-state, the only key difference - "easy" magic is not applicable here,
 as long we could not afford "setters" it relies on.
+
+## PPS:
+https://github.com/zhDmitry/restate - another promising library to double check.
